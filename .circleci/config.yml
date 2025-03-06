@@ -18,18 +18,17 @@ jobs:
             - v1-dependencies-
 
       - run:
-          name: Install dependencies
-          command: |
-            python -m venv venv
-            . venv/bin/activate
-            pip install --upgrade pip
-            pip install -r app/requirements.txt
-
-      - run:
           name: Run Pylint
           command: |
             . venv/bin/activate
-            pylint app/
+            pylint app/app.py
+
+      - save_cache:
+          paths:
+            - ~/.cache/pip
+            - venv
+          key: v1-dependencies-{{ checksum "app/requirements.txt" }}
+
   test_coverage:
     executor: python-executor
     steps:
@@ -78,6 +77,8 @@ workflows:
     jobs:
       - linting
       - test_coverage:
+          requires:
+            - linting
           filters:
             branches:
               only:
