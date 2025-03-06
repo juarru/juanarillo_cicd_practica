@@ -6,6 +6,9 @@ executors:
       - image: cimg/python:3.9
     working_directory: ~/repo
 
+orbs:
+  sonarcloud: sonarsource/sonarcloud@2.0.0
+
 jobs:
   install_dependencies:
     executor: python-executor
@@ -67,16 +70,23 @@ jobs:
           name: Run coverage
           command: |
             . venv/bin/activate
-            pytest --cov=app --cov-report=html:coverage_html app/test_app.py
+            mkdir -p test-results coverage_reports
+            pytest --cov=app --cov-report=xml:coverage_reports/coverage.xml app/test_app.py
+
+      - sonarcloud/scan
+
+      - store_test_results: 
+          path: test-results
 
       - store_artifacts:
-          path: coverage_html
-          destination: coverage_report
+          path: coverage_reports/coverage.xml
+          destination: coverage_xml
             
       - run:
           name: Finished pipeline
           command: |
             echo "Finished pipeline"
+
 
 workflows:
   linting-test-coverage:
