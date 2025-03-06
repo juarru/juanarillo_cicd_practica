@@ -96,6 +96,7 @@ workflows:
           requires:
             - install_dependencies
       - test_coverage:
+          context: SonarCloud
           requires:
             - linting
           filters:
