@@ -12,8 +12,22 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Execution verify
-          command: echo "CircleCI is working"
+          name: Install dependencies
+          command: |
+            python -m vevn venv
+            . venv/bin/activate
+            pip install --upgrade pip
+            pip install -r requirements.txt
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            pytest -v --tb=short
+      - run:
+          name: Run coverage
+          command: |
+            . venv/bin/activate
+            pytest --cov=app test_app.py
 
 workflows:
   version: 2
