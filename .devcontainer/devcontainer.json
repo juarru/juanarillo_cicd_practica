@@ -1,0 +1,14 @@
+{
+    "name": "Flask DevContainer",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "web",
+    "workspaceFolder": "/app",
+    "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker"
+    ],
+    "forwardPorts": [5001],
+    "postCreateCommand": "pip install -r requirements.txt",
+    "remoteUser": "root"
+}
