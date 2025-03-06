@@ -21,7 +21,7 @@ jobs:
           name: Run Pylint
           command: |
             . venv/bin/activate
-            pylint app/app.py
+            pylint --rcfile=app/.pylintrc app/app.py
 
       - save_cache:
           paths:
