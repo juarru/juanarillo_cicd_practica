@@ -30,5 +30,5 @@ def test_not_found(client):
 #     assert False, "This test is designed to fail"
 
 # Test to see what happens in coverage when a function is not tested. Uncomment to see the result.
-def test_no_tested_function():
-    return "This function is not tested"
+# def test_no_tested_function():
+#     return "This function is not tested"
