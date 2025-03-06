@@ -1,3 +1,7 @@
 {
-    "terminal.integrated.shellArgs.linux": ["-c", "docker-compose up --build"]
+    "terminal.integrated.shellArgs.linux": [
+        "-c",
+        "docker-compose up --build"
+    ],
+    "circleci.filters.branchFilter": "default"
 }
