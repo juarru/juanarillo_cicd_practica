@@ -1,16 +1,19 @@
-from flask import Flask, jsonify
-import redis
 import os
+from flask import Flask
+import redis
 
 app = Flask(__name__)
 
 # Redis Configuration
 REDIS_HOST = os.getenv("REDIS_HOST", "redis")
-REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
-REDIS_DB = int(os.getenv("REDIS_DB", 0))
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+REDIS_DB = int(os.getenv("REDIS_DB", "0"))
 
 # Redis connection
 db = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, decode_responses=True)
+
+# Error: Variable with a single character (not recommended by pylint). Uncomment to see how pylint works.
+x = "This variable has a very short name"
 
 @app.route('/')
 def index():
