@@ -46,7 +46,7 @@ appendonly.aof
 
 # Archivos generados por IDEs/editores
 .idea/
-.vscode/
+#.vscode/
 *.swp
 *.swo
 
