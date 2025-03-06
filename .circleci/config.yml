@@ -35,7 +35,7 @@ jobs:
 
 workflows:
   version: 2
-  test:
+  test and coverage:
     jobs:
       - test:
           filters:
