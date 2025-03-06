@@ -7,10 +7,17 @@ executors:
     working_directory: ~/repo
 
 jobs:
-  test:
+  test_coverage:
     executor: python-executor
     steps:
       - checkout
+
+      # Restore cache
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "app/requirements.txt" }}
+            - v1-dependencies-
+
       - run:
           name: Install dependencies
           command: |
@@ -18,16 +25,26 @@ jobs:
             . venv/bin/activate
             pip install --upgrade pip
             pip install -r app/requirements.txt
+
+      # Save cache
+      - save_cache:
+          paths:
+            - ~/.cache/pip
+            - venv
+          key: v1-dependencies-{{ checksum "app/requirements.txt" }}
+
       - run:
           name: Run tests
           command: |
             . venv/bin/activate
             pytest -v --tb=short
+
       - run:
           name: Run coverage
           command: |
             . venv/bin/activate
             pytest --cov=app app/test_app.py
+            
       - run:
           name: Finished pipeline
           command: |
@@ -37,7 +54,7 @@ workflows:
   version: 2
   test and coverage:
     jobs:
-      - test:
+      - test_coverage:
           filters:
             branches:
               only:
