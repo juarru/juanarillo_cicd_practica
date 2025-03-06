@@ -67,7 +67,11 @@ jobs:
           name: Run coverage
           command: |
             . venv/bin/activate
-            pytest --cov=app app/test_app.py
+            pytest --cov=app --cov-report=html:coverage_html app/test_app.py
+
+      - store_artifacts:
+          path: coverage_html
+          destination: coverage_report
             
       - run:
           name: Finished pipeline
