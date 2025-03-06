@@ -12,7 +12,7 @@ REDIS_DB = int(os.getenv("REDIS_DB", "0"))
 # Redis connection
 db = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, decode_responses=True)
 
-# Error: Variable with a single character (not recommended by pylint). Uncomment to see how pylint works.
+# Error: Uncomment to see how pylint works.
 # x = "This variable has a very short name"
 
 @app.route('/')
