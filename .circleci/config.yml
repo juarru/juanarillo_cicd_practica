@@ -7,6 +7,30 @@ executors:
     working_directory: ~/repo
 
 jobs:
+  install_dependencies:
+    executor: python-executor
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "app/requirements.txt" }}
+            - v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install --upgrade pip
+            pip install -r app/requirements.txt
+
+      - save_cache:
+          paths:
+            - ~/.cache/pip
+            - venv
+          key: v1-dependencies-{{ checksum "app/requirements.txt" }}
+
   linting:
     executor: python-executor
     steps:
@@ -23,37 +47,15 @@ jobs:
             . venv/bin/activate
             pylint --rcfile=app/.pylintrc app/app.py
 
-      - save_cache:
-          paths:
-            - ~/.cache/pip
-            - venv
-          key: v1-dependencies-{{ checksum "app/requirements.txt" }}
-
   test_coverage:
     executor: python-executor
     steps:
       - checkout
 
-      # Restore cache
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "app/requirements.txt" }}
             - v1-dependencies-
-
-      - run:
-          name: Install dependencies
-          command: |
-            python -m venv venv
-            . venv/bin/activate
-            pip install --upgrade pip
-            pip install -r app/requirements.txt
-
-      # Save cache
-      - save_cache:
-          paths:
-            - ~/.cache/pip
-            - venv
-          key: v1-dependencies-{{ checksum "app/requirements.txt" }}
 
       - run:
           name: Run tests
@@ -75,7 +77,10 @@ jobs:
 workflows:
   linting-test-coverage:
     jobs:
-      - linting
+      - install_dependencies
+      - linting:
+          requires:
+            - install_dependencies
       - test_coverage:
           requires:
             - linting
