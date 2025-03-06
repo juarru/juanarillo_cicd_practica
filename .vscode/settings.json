@@ -3,5 +3,5 @@
         "-c",
         "docker-compose up --build"
     ],
-    "circleci.filters.branchFilter": "default"
+    "circleci.filters.branchFilter": "allBranches"
 }
