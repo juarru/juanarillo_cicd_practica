@@ -7,6 +7,29 @@ executors:
     working_directory: ~/repo
 
 jobs:
+  linting:
+    executor: python-executor
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "app/requirements.txt" }}
+            - v1-dependencies-
+
+      - run:
+          name: Install dependencies
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install --upgrade pip
+            pip install -r app/requirements.txt
+
+      - run:
+          name: Run Pylint
+          command: |
+            . venv/bin/activate
+            pylint app/
   test_coverage:
     executor: python-executor
     steps:
@@ -51,9 +74,9 @@ jobs:
             echo "Finished pipeline"
 
 workflows:
-  version: 2
-  test and coverage:
+  linting-test-coverage:
     jobs:
+      - linting
       - test_coverage:
           filters:
             branches:
