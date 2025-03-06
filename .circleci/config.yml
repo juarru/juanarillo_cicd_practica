@@ -73,12 +73,21 @@ jobs:
             mkdir -p test-results coverage_reports
             pytest --cov=app app/test_app.py
 
+      - run:
+          name: Finished dev pipeline
+          command: |
+            echo "Finished dev pipeline"
+
+  sonarqube_scan:
+    executor: python-executor
+    steps:
+      - checkout
       - sonarcloud/scan
             
       - run:
-          name: Finished pipeline
+          name: Finished main pipeline
           command: |
-            echo "Finished pipeline"
+            echo "Finished main pipeline"
 
 
 workflows:
@@ -89,7 +98,6 @@ workflows:
           requires:
             - install_dependencies
       - test_coverage:
-          context: SonarCloud
           requires:
             - linting
           filters:
@@ -97,4 +105,12 @@ workflows:
               only:
                 - main
                 - dev
+      - sonarqube_scan:
+          context: SonarCloud
+          requires:
+            - test_coverage
+          filters:
+            branches:
+              only:
+                - main
       
