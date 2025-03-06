@@ -27,7 +27,11 @@ jobs:
           name: Run coverage
           command: |
             . venv/bin/activate
-            pytest --cov=app test_app.py
+            pytest --cov=app app/test_app.py
+      - run:
+          name: Finished pipeline
+          command: |
+            echo "Finished pipeline"
 
 workflows:
   version: 2
