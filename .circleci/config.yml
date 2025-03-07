@@ -116,9 +116,9 @@ jobs:
       - run:
           name: Build Docker image
           command: docker build -t ${DOCKERHUB_USERNAME}/flask-app:${IMAGE_VERSION} .
-      - run:
-          name: Docker Hub login (for dev)
-          command: echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
+      # - run:
+      #     name: Docker Hub login (for dev)
+      #     command: echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
       - run:
           name: Upload image to Docker Hub (dev)
           command: docker push ${DOCKERHUB_USERNAME}/flask-app:${IMAGE_VERSION}
