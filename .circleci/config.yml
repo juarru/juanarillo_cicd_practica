@@ -87,6 +87,10 @@ jobs:
     executor: python-executor
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "app/requirements.txt" }}
+            - v1-dependencies-
       - sonarcloud/scan
             
       - run:
