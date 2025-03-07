@@ -97,6 +97,32 @@ jobs:
           command: |
             echo "Finished main pipeline"
 
+  build-and-push-dev:
+    executor: python-executor
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "app/requirements.txt" }}
+            - v1-dependencies-
+
+      - run:
+          name: Get `dev` version
+          command: |
+            COMMIT_HASH=$(git rev-parse --short HEAD)
+            echo "export IMAGE_VERSION=dev-${COMMIT_HASH}" >> $BASH_ENV
+      - run:
+          name: Build Docker image
+          command: docker build -t $DOCKERHUB_USERNAME/flask-app:${IMAGE_VERSION} .
+      - run:
+          name: Docker Hub login (for dev)
+          command: echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+      - run:
+          name: Upload image to Docker Hub (dev)
+          command: docker push $DOCKERHUB_USERNAME/flask-app:${IMAGE_VERSION}
+
 workflows:
   linting-test-coverage:
     jobs:
@@ -118,6 +144,13 @@ workflows:
             branches:
               only:
                 - main
+                - dev
+      - build-and-push-dev:
+          requires:
+            - test_coverage
+          filters:
+            branches:
+              only:
                 - dev
       - sonarqube_scan:
           context: SonarCloud
