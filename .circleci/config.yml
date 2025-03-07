@@ -146,6 +146,7 @@ workflows:
                 - main
                 - dev
       - build-and-push-dev:
+          context: DockerHub
           requires:
             - test_coverage
           filters:
