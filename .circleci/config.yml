@@ -72,7 +72,11 @@ jobs:
           command: |
             . venv/bin/activate
             mkdir -p test-results coverage_reports
-            pytest --cov=app app/test_app.py
+            pytest --cov=app --cov-report=xml:coverage_reports/coverage.xml app/test_app.py
+
+      - store_artifacts:
+          path: coverage_reports/coverage.xml
+          destination: coverage_xml
 
       - run:
           name: Finished dev pipeline
