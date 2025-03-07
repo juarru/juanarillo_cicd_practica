@@ -73,11 +73,6 @@ jobs:
             mkdir -p test-results coverage_reports
             pytest --cov=app app/test_app.py
 
-      - run:
-          name: Finished dev pipeline
-          command: |
-            echo "Finished dev pipeline"
-
   sonarqube_scan:
     executor: python-executor
     steps:
@@ -106,15 +101,12 @@ jobs:
       - run:
           name: secrets scan
           command: |
-            ggshield secret scan repo . --json > ggshield_results.json
+            ggshield secret scan ci
 
       - run:
-          name: Send results to gitGuardian
+          name: Finished dev pipeline
           command: |
-            command: |
-              curl -X POST "https://api.gitguardian.com/v1/report" \
-              -H "Content-Type: application/json" \
-              -d @ggshield-report.json
+            echo "Finished dev pipeline"
 
 workflows:
   linting-test-coverage:
