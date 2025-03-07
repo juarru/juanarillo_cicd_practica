@@ -74,6 +74,11 @@ jobs:
             mkdir -p test-results coverage_reports
             pytest --cov=app app/test_app.py
 
+      - run:
+          name: Finished dev pipeline
+          command: |
+            echo "Finished dev pipeline"
+
   sonarqube_scan:
     executor: python-executor
     steps:
@@ -84,30 +89,6 @@ jobs:
           name: Finished main pipeline
           command: |
             echo "Finished main pipeline"
-  
-  # gitguardian_scan: 
-  #   executor: python-executor
-  #   steps:
-  #     - checkout
-
-  #     - restore_cache:
-  #         keys:
-  #           - v1-dependencies-{{ checksum "app/requirements.txt" }}
-  #           - v1-dependencies-
-
-  #     - run:
-  #         name: Install gitGuardian
-  #         command: |
-  #           pip install ggshield
-  #     - run:
-  #         name: secrets scan
-  #         command: |
-  #           ggshield secret scan ci
-
-  #     - run:
-  #         name: Finished dev pipeline
-  #         command: |
-  #           echo "Finished dev pipeline"
 
 workflows:
   linting-test-coverage:
@@ -119,15 +100,6 @@ workflows:
       - test_coverage:
           requires:
             - linting
-      # - gitguardian_scan:
-      #     context: GitGuardian
-      #     requires:
-      #       - test_coverage
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      #           - dev
       - ggshield/scan:
           name: ggshield-scan
           base_revision: <<pipeline.git.base_revision>>
