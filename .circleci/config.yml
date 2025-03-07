@@ -8,6 +8,7 @@ executors:
 
 orbs:
   sonarcloud: sonarsource/sonarcloud@2.0.0
+  ggshield: gitguardian/ggshield@volatile
 
 jobs:
   install_dependencies:
@@ -84,29 +85,29 @@ jobs:
           command: |
             echo "Finished main pipeline"
   
-  gitguardian_scan: 
-    executor: python-executor
-    steps:
-      - checkout
+  # gitguardian_scan: 
+  #   executor: python-executor
+  #   steps:
+  #     - checkout
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "app/requirements.txt" }}
-            - v1-dependencies-
+  #     - restore_cache:
+  #         keys:
+  #           - v1-dependencies-{{ checksum "app/requirements.txt" }}
+  #           - v1-dependencies-
 
-      - run:
-          name: Install gitGuardian
-          command: |
-            pip install ggshield
-      - run:
-          name: secrets scan
-          command: |
-            ggshield secret scan ci
+  #     - run:
+  #         name: Install gitGuardian
+  #         command: |
+  #           pip install ggshield
+  #     - run:
+  #         name: secrets scan
+  #         command: |
+  #           ggshield secret scan ci
 
-      - run:
-          name: Finished dev pipeline
-          command: |
-            echo "Finished dev pipeline"
+  #     - run:
+  #         name: Finished dev pipeline
+  #         command: |
+  #           echo "Finished dev pipeline"
 
 workflows:
   linting-test-coverage:
@@ -118,19 +119,23 @@ workflows:
       - test_coverage:
           requires:
             - linting
-      - gitguardian_scan:
-          context: GitGuardian
-          requires:
-            - test_coverage
-          filters:
-            branches:
-              only:
-                - main
-                - dev
+      # - gitguardian_scan:
+      #     context: GitGuardian
+      #     requires:
+      #       - test_coverage
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
+      #           - dev
+      - ggshield/scan:
+          name: ggshield-scan
+          base_revision: <<pipeline.git.base_revision>>
+          revision: <<pipeline.git.revision>>
       - sonarqube_scan:
           context: SonarCloud
           requires:
-            - gitguardian_scan
+            - ggshield/scan
           filters:
             branches:
               only:
