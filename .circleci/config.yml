@@ -71,8 +71,14 @@ jobs:
           name: Run coverage
           command: |
             . venv/bin/activate
-            mkdir -p test-results coverage_reports
+            mkdir -p coverage_reports
             pytest --cov=app --cov-report=xml:coverage_reports/coverage.xml app/test_app.py
+
+      - run:
+          name: Verify coverage report exists
+          command: |
+            ls -lah coverage_reports/ || echo "Coverage report not found"
+            cat coverage_reports/coverage.xml || echo "Coverage XML is empty"
 
       - store_artifacts:
           path: coverage_reports/coverage.xml
