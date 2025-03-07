@@ -132,10 +132,17 @@ workflows:
           name: ggshield-scan
           base_revision: <<pipeline.git.base_revision>>
           revision: <<pipeline.git.revision>>
+          requires:
+            - test_coverage
+          filters:
+            branches:
+              only:
+                - main
+                - dev
       - sonarqube_scan:
           context: SonarCloud
           requires:
-            - ggshield/scan
+            - test_coverage
           filters:
             branches:
               only:
