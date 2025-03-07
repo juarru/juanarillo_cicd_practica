@@ -106,7 +106,15 @@ jobs:
       - run:
           name: secrets scan
           command: |
-            ggshield secret scan repo .
+            ggshield secret scan repo . --json > ggshield_results.json
+
+      - run:
+          name: Send results to gitGuardian
+          command: |
+            command: |
+              curl -X POST "https://api.gitguardian.com/v1/report" \
+              -H "Content-Type: application/json" \
+              -d @ggshield-report.json
 
 workflows:
   linting-test-coverage:
