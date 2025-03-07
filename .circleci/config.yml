@@ -123,6 +123,82 @@ jobs:
           name: Upload image to Docker Hub (dev)
           command: docker push ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION}
 
+  generate-release-tag:
+    executor: python-executor
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "app/requirements.txt" }}
+            - v1-dependencies-
+
+      - run:
+          name: Generate new version tag
+          command: |
+            LATEST_TAG=$(git describe --tags --match "v*" --abbrev=0 || echo "v0.0.0")
+            echo "Latest tag: $LATEST_TAG"
+            
+            NEW_TAG=$(python -c "from packaging.version import Version as V; print('v' + str(V('${LATEST_TAG}'.lstrip('v')).major) + '.' + str(V('${LATEST_TAG}'.lstrip('v')).minor + 1) + '.0')")
+            echo "New version: $NEW_TAG"
+            echo "export NEW_TAG=$NEW_TAG" >> $BASH_ENV
+
+            git config --global user.email "ci-bot@example.com"
+            git config --global user.name "CircleCI Bot"
+
+            git tag $NEW_TAG
+            git push origin $NEW_TAG
+
+      - run:
+          name: Generate Changelog
+          command: |
+            echo "## Changelog for $NEW_TAG" > changelog.md
+            echo "" >> changelog.md
+            git log --pretty=format:"- %h %s (%an)" $(git describe --tags --abbrev=0 @^)..@ >> changelog.md
+            cat changelog.md
+            echo "export CHANGELOG_CONTENT=$(cat changelog.md | jq -Rs .)" >> $BASH_ENV
+
+      - run:
+          name: Create GitHub Release
+          command: |
+            curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
+                 -H "Accept: application/vnd.github.v3+json" \
+                 https://api.github.com/repos/${GITHUB_REPO}/releases \
+                 -d "{
+                      \"tag_name\": \"${NEW_TAG}\",
+                      \"name\": \"Release ${NEW_TAG}\",
+                      \"body\": ${CHANGELOG_CONTENT},
+                      \"draft\": false,
+                      \"prerelease\": false
+                  }"
+
+  build-and-push-main:
+    executor: python-executor
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "app/requirements.txt" }}
+            - v1-dependencies-
+      - run:
+          name: Get version from Git Tag
+          command: |
+            TAG=$(git describe --tags --match "v*" --abbrev=0)
+            echo "export IMAGE_VERSION=${TAG}" >> $BASH_ENV
+      - run:
+          name: Build Docker Image
+          command: docker build -t ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} .
+      - run:
+          name: Login en Docker Hub (para producción)
+          command: echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
+      - run:
+          name: Subir imagen a Docker Hub con versión y latest
+          command: |
+            docker push ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION}
+            docker tag ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} ${DOCKERHUB_USERNAME}/cicd_practica:latest
+            docker push ${DOCKERHUB_USERNAME}/cicd_practica:latest
+
 workflows:
   linting-test-coverage:
     jobs:
@@ -161,4 +237,22 @@ workflows:
             branches:
               only:
                 - main
+      - generate-release-tag:
+          context: 
+            - GitHub
+            - DockerHub
+          requires:
+            - sonarqube_scan
+          filters:  
+            branches:
+              only:
+                - main
+      - build-and-push-main:
+          context: DockerHub
+          requires:
+            - generate-release-tag
+          filters:
+            branches:
+              only:
+                - main         
       
