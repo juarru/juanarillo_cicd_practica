@@ -106,9 +106,7 @@ jobs:
       - run:
           name: secrets scan
           command: |
-            ggshield secret scan repo . --exit-zero
-          environment:
-            GITGUARDIAN_API_KEY: $GITGUARDIAN_API_KEY
+            ggshield secret scan repo .
 
 workflows:
   linting-test-coverage:
