@@ -94,6 +94,12 @@ jobs:
             - v1-coverage-{{ checksum "coverage_reports/coverage.xml" }}
             - v1-dependencies-
 
+      - run:
+          name: Verify coverage file before SonarQube scan
+          command: |
+            ls -lah coverage_reports/ || echo "Coverage report not found"
+            cat coverage_reports/coverage.xml || echo "Coverage XML is empty"
+
       - sonarcloud/scan
             
       - run:
