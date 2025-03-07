@@ -88,7 +88,27 @@ jobs:
           name: Finished main pipeline
           command: |
             echo "Finished main pipeline"
+  
+  gitguardian_scan: 
+    executor: python-executor
+    steps:
+      - checkout
 
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "app/requirements.txt" }}
+            - v1-dependencies-
+
+      - run:
+          name: Install gitGuardian
+          command: |
+            pip install ggshield
+      - run:
+          name: secrets scan
+          command: |
+            ggshield secret scan repo . --exit-zero
+          environment:
+            GITGUARDIAN_API_KEY: $GITGUARDIAN_API_KEY
 
 workflows:
   linting-test-coverage:
@@ -100,6 +120,10 @@ workflows:
       - test_coverage:
           requires:
             - linting
+      - gitguardian_scan:
+          context: GitGuardian
+          requires:
+            - test_coverage
           filters:
             branches:
               only:
@@ -108,7 +132,7 @@ workflows:
       - sonarqube_scan:
           context: SonarCloud
           requires:
-            - test_coverage
+            - gitguardian_scan
           filters:
             branches:
               only:
