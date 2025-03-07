@@ -121,7 +121,7 @@ jobs:
           command: echo "${dockerhub}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
       - run:
           name: Upload image to Docker Hub (dev)
-          command: docker push ${DOCKERHUB_USERNAME}/flask-app:${IMAGE_VERSION}
+          command: docker push ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION}
 
 workflows:
   linting-test-coverage:
