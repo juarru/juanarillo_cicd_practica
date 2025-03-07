@@ -74,8 +74,8 @@ jobs:
             mkdir -p coverage_reports
             pytest --cov=app --cov-report=xml:coverage_reports/coverage.xml app/test_app.py
 
-      - save_cache:
-          key: v1-coverage-{{ checksum "coverage_reports/coverage.xml" }}
+      - persist_to_workspace:
+          root: .
           paths:
             - coverage_reports
 
@@ -88,11 +88,8 @@ jobs:
     executor: python-executor
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "app/requirements.txt" }}
-            - v1-coverage-{{ checksum "coverage_reports/coverage.xml" }}
-            - v1-dependencies-
+      - attach_workspace:
+          at: .
 
       - run:
           name: Verify coverage file before SonarQube scan
