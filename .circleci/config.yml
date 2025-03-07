@@ -115,13 +115,13 @@ jobs:
             echo "export IMAGE_VERSION=dev-${COMMIT_HASH}" >> $BASH_ENV
       - run:
           name: Build Docker image
-          command: docker build -t $DOCKERHUB_USERNAME/flask-app:${IMAGE_VERSION} .
+          command: docker build -t ${DOCKERHUB_USERNAME}/flask-app:${IMAGE_VERSION} .
       - run:
           name: Docker Hub login (for dev)
-          command: echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          command: echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
       - run:
           name: Upload image to Docker Hub (dev)
-          command: docker push $DOCKERHUB_USERNAME/flask-app:${IMAGE_VERSION}
+          command: docker push ${DOCKERHUB_USERNAME}/flask-app:${IMAGE_VERSION}
 
 workflows:
   linting-test-coverage:
