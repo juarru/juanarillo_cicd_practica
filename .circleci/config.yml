@@ -123,13 +123,13 @@ jobs:
           name: Upload image to Docker Hub (dev)
           command: docker push ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION}
       - run:
-          name: Cleanup old `dev-` images. Keep only the last 3.
+          name: Cleanup old `dev-` images. Keep only the last 4.
           command: |
             # Get tags list 'dev-' from Docker Hub
             TAGS=$(curl -s -H "Authorization: JWT $(curl -s -X POST -H "Content-Type: application/json" -d '{"username": "'${DOCKERHUB_USERNAME}'", "password": "'${dockerhub}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)" \
               "https://hub.docker.com/v2/repositories/${DOCKERHUB_USERNAME}/cicd_practica/tags?page_size=100" | jq -r '.results[].name' | grep '^dev-')
 
-            # Count number of images. If there are more than 3, delete old ones.
+            # Count number of images. If there are more than 4, delete old ones.
             COUNT=$(echo "$TAGS" | wc -l)
             if [ "$COUNT" -gt 3 ]; then
               TO_DELETE=$(echo "$TAGS" | sort | head -n $(($COUNT - 3)))
