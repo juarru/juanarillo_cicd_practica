@@ -157,7 +157,8 @@ jobs:
             echo "" >> changelog.md
             git log --pretty=format:"- %h %s (%an)" $(git describe --tags --abbrev=0 @^)..@ >> changelog.md
             cat changelog.md
-            echo "export CHANGELOG_CONTENT=$(cat changelog.md | jq -Rs .)" >> $BASH_ENV
+            CHANGELOG_CONTENT=$(jq -Rs . < changelog.md)
+            echo "export CHANGELOG_CONTENT='$CHANGELOG_CONTENT'" >> $BASH_ENV
 
       - run:
           name: Create GitHub Release
@@ -168,7 +169,7 @@ jobs:
                  -d "{
                       \"tag_name\": \"${NEW_TAG}\",
                       \"name\": \"Release ${NEW_TAG}\",
-                      \"body\": ${CHANGELOG_CONTENT},
+                      \"body\": ${CHANGELOG_CONTENT:-\"No changelog available.\},
                       \"draft\": false,
                       \"prerelease\": false
                   }"
