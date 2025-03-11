@@ -7,7 +7,7 @@ on:
 
 jobs:
   setup:
-    runs-on: ubuntu:20.04
+    runs-on: ubuntu-latest
     outputs:
       cache-key: ${{ steps.cache-deps.outputs.cache-hit }}
     steps:
@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: '3.10'
 
       - name: Cache dependencies
         id: cache-deps
