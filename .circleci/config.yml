@@ -192,9 +192,9 @@ jobs:
           command: docker build -t ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} .
       - run:
           name: Login en Docker Hub (para producción)
-          command: echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
+          command: echo "${dockerhub}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
       - run:
-          name: Subir imagen a Docker Hub con versión y latest
+          name: Upload image to Docker Hub with version and latest
           command: |
             docker push ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION}
             docker tag ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} ${DOCKERHUB_USERNAME}/cicd_practica:latest
