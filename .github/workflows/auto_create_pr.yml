@@ -1,0 +1,26 @@
+name: Auto Create Pull Request
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - dev
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: dev
+          branch: ${{ github.ref_name }}
+          title: "Auto PR: ${{ github.ref_name }} → dev"
+          body: "Este PR fue creado automáticamente al subir la rama `${{ github.ref_name }}`"
+          labels: "auto-pr"
+          draft: false
