@@ -223,13 +223,28 @@ jobs:
 workflows:
   linting-test-coverage:
     jobs:
-      - install_dependencies
+      - install_dependencies:
+          filters:
+            branches:
+              only:
+                - main
+                - dev
       - linting:
           requires:
             - install_dependencies
+          filters:
+            branches:
+              only:
+                - main
+                - dev
       - test_coverage:
           requires:
             - linting
+          filters:
+            branches:
+              only:
+                - main
+                - dev
       - ggshield/scan:
           name: ggshield-scan
           base_revision: <<pipeline.git.base_revision>>
