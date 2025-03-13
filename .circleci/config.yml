@@ -146,17 +146,6 @@ jobs:
               echo "No old dev images to delete."
             fi
 
-  trigger_github_action:
-    executor: curl-executor
-    steps:
-      - run:
-          name: Disparar GitHub Actions para merge
-          command: |
-            curl -X POST -H "Accept: application/vnd.github.everest-preview+json" \
-                -H "Authorization: token ${GITHUB_PAT}" \
-                https://api.github.com/repos/TU_USUARIO/TU_REPOSITORIO/dispatches \
-                -d '{"event_type": "trigger-merge"}'
-
   generate-release-tag:
     executor: python-executor
     steps:
@@ -276,13 +265,6 @@ workflows:
           context: DockerHub
           requires:
             - test_coverage
-          filters:
-            branches:
-              only:
-                - dev
-      - trigger_github_action:
-          requires:
-            - build-and-push-dev
           filters:
             branches:
               only:
