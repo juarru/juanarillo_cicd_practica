@@ -1,0 +1,31 @@
+name: Merge Dev to Main
+
+on:
+  repository_dispatch:
+    types: [trigger-merge]
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: dev
+          title: "Merge dev into main"
+          body: "Pipeline en dev correcto, pasando a main"
+          labels: "automerge"
+          draft: false
+
+      - name: Auto-merge Pull Request
+        if: steps.create_pr.outputs.pull-request-operation == 'created'
+        run: |
+          gh pr merge --auto --squash "$(jq -r '.pull_request.number' <<< '${{ steps.create_pr.outputs.pull-request-json }}')"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
