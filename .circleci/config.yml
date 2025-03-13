@@ -154,7 +154,7 @@ jobs:
           command: |
             curl -X POST -H "Accept: application/vnd.github.everest-preview+json" \
                 -H "Authorization: token ${GITHUB_PAT}" \
-                https://api.github.com/repos/TU_USUARIO/TU_REPOSITORIO/dispatches \
+                https://api.github.com/repos/juarru/juanarillo_cicd_practica/dispatches \
                 -d '{"event_type": "trigger-merge"}'
 
   generate-release-tag:
