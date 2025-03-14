@@ -5,10 +5,7 @@ on:
     branches-ignore:
       - main
       - dev
-  pull_request:
-    branches:
-      - main
-      - dev
+
 jobs:
   create-pr:
     runs-on: ubuntu-latest
