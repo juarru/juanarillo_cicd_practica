@@ -36,6 +36,6 @@ jobs:
 
       - name: Trigger PR Checks
         run: |
-          gh workflow run pr-checks.yml --repo ${{ github.repository }}
+          gh workflow run pr_checks.yml --repo ${{ github.repository }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
