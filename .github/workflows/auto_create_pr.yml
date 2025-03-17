@@ -33,9 +33,3 @@ jobs:
                        -H "Accept: application/vnd.github.v3+json" \
                        -d "$PR_DATA" \
                        "https://api.github.com/repos/$REPO/pulls"
-
-      - name: Trigger PR Checks
-        run: |
-          gh workflow run pr_checks.yml --repo ${{ github.repository }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
