@@ -101,51 +101,6 @@ jobs:
           command: |
             echo "Finished main pipeline"
 
-  build-and-push-dev:
-    executor: python-executor
-    steps:
-      - checkout
-      - setup_remote_docker
-
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "app/requirements.txt" }}
-            - v1-dependencies-
-
-      - run:
-          name: Get `dev` version
-          command: |
-            COMMIT_HASH=$(git rev-parse --short HEAD)
-            echo "export IMAGE_VERSION=dev-${COMMIT_HASH}" >> $BASH_ENV
-      - run:
-          name: Build Docker image
-          command: docker build -t ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} .
-      - run:
-          name: Docker Hub login (for dev)
-          command: echo "${dockerhub}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
-      - run:
-          name: Upload image to Docker Hub (dev)
-          command: docker push ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION}
-      - run:
-          name: Cleanup old `dev-` images. Keep only the last 4.
-          command: |
-            # Get tags list 'dev-' from Docker Hub
-            TAGS=$(curl -s -H "Authorization: JWT $(curl -s -X POST -H "Content-Type: application/json" -d '{"username": "'${DOCKERHUB_USERNAME}'", "password": "'${dockerhub}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)" \
-              "https://hub.docker.com/v2/repositories/${DOCKERHUB_USERNAME}/cicd_practica/tags?page_size=100" | jq -r '.results[].name' | grep '^dev-')
-
-            # Count number of images. If there are more than 4, delete old ones.
-            COUNT=$(echo "$TAGS" | wc -l)
-            if [ "$COUNT" -gt 3 ]; then
-              TO_DELETE=$(echo "$TAGS" | sort | head -n $(($COUNT - 3)))
-              for TAG in $TO_DELETE; do
-                echo "Deleting old dev tag: $TAG"
-                curl -X DELETE -H "Authorization: JWT $(curl -s -X POST -H "Content-Type: application/json" -d '{"username": "'${DOCKERHUB_USERNAME}'", "password": "'${dockerhub}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)" \
-                  "https://hub.docker.com/v2/repositories/${DOCKERHUB_USERNAME}/cicd_practica/tags/$TAG/"
-              done
-            else
-              echo "No old dev images to delete."
-            fi
-
   generate-release-tag:
     executor: python-executor
     steps:
@@ -260,14 +215,6 @@ workflows:
             branches:
               only:
                 - main
-                - dev
-      - build-and-push-dev:
-          context: DockerHub
-          requires:
-            - test_coverage
-          filters:
-            branches:
-              only:
                 - dev
       - sonarqube_scan:
           context: SonarCloud
