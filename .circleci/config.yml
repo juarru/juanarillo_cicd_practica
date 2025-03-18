@@ -200,7 +200,7 @@ jobs:
           name: Update Deployment YAML
           command: |
             cd juanarillo_cicd_practica_argo
-            sed -i "s|image: ${DOCKERHUB_USERNAME}/cicd_practica:.*|image: ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION}|" deployment.yaml
+            sed -i "s|image: ${DOCKERHUB_USERNAME}/cicd_practica:.*|image: ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION}|" deployment.yml
             git add deployment.yaml
             git commit -m "Update image to ${IMAGE_VERSION}"
             git push https://x-access-token:${GITHUB_PAT}@github.com/juarru/juanarillo_cicd_practica_argo.git main
