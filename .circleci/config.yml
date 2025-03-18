@@ -201,7 +201,7 @@ jobs:
           command: |
             cd juanarillo_cicd_practica_argo
             sed -i "s|image: ${DOCKERHUB_USERNAME}/cicd_practica:.*|image: ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION}|" k8s/deployment.yml
-            git add deployment.yml
+            git add k8s/deployment.yml
             git commit -m "Update image to ${IMAGE_VERSION}"
             git push https://x-access-token:${GITHUB_PAT}@github.com/juarru/juanarillo_cicd_practica_argo.git main
     environment:
