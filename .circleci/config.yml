@@ -178,10 +178,22 @@ jobs:
             docker push ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION}
             docker tag ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} ${DOCKERHUB_USERNAME}/cicd_practica:latest
             docker push ${DOCKERHUB_USERNAME}/cicd_practica:latest
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - image_version.txt
 
   update-argo-manifests:
     executor: python-executor
     steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: Load IMAGE_VERSION
+          command: |
+            export IMAGE_VERSION=$(cat /tmp/image_version.txt)
+            echo "Loaded IMAGE_VERSION: ${IMAGE_VERSION}"
       - run:
           name: Install Git
           command: |
