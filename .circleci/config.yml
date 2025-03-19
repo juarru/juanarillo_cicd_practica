@@ -166,6 +166,7 @@ jobs:
           command: |
             TAG=$(git describe --tags --match "v*" --abbrev=0)
             echo "export IMAGE_VERSION=${TAG}" >> $BASH_ENV
+            echo "${IMAGE_VERSION}" > /tmp/image_version.txt
       - run:
           name: Build Docker Image
           command: docker build -t ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} .
@@ -179,16 +180,16 @@ jobs:
             docker tag ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} ${DOCKERHUB_USERNAME}/cicd_practica:latest
             docker push ${DOCKERHUB_USERNAME}/cicd_practica:latest
       - persist_to_workspace:
-          root: /
+          root: /tmp
           paths:
-            - ./image_version.txt
+            - image_version.txt
 
   update-argo-manifests:
     executor: python-executor
     steps:
       - checkout
       - attach_workspace:
-          at: /
+          at: /tmp
       - run:
           name: Load IMAGE_VERSION
           command: |
