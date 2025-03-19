@@ -167,6 +167,7 @@ jobs:
             TAG=$(git describe --tags --match "v*" --abbrev=0)
             echo "export IMAGE_VERSION=${TAG}" >> $BASH_ENV
             echo "${IMAGE_VERSION}" > /tmp/image_version.txt
+            echo "Loaded IMAGE_VERSION: ${IMAGE_VERSION}"
       - run:
           name: Build Docker Image
           command: docker build -t ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} .
