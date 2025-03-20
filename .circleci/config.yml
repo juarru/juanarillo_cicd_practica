@@ -91,6 +91,7 @@ jobs:
           root: .
           paths:
             - coverage.xml
+            - sonar-project.properties
 
       - run:
           name: Finished dev pipeline
@@ -112,7 +113,13 @@ jobs:
           at: .
       - run:
           name: Escanear con SonarQube
-          command: sonar-scanner -Dproject.settings=sonar-project.properties
+          command: |
+            sonar-scanner \
+              -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+              -Dsonar.organization=${SONAR_ORGANIZATION} \
+              -Dsonar.host.url=${SONAR_HOST_URL} \
+              -Dsonar.login=${SONAR_TOKEN} \
+              -Dproject.settings=sonar-project.properties
 
   generate-release-tag:
     executor: python-executor
