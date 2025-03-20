@@ -91,7 +91,6 @@ jobs:
           root: .
           paths:
             - coverage.xml
-            - venv
 
       - run:
           name: Finished dev pipeline
@@ -113,14 +112,7 @@ jobs:
           at: .
       - run:
           name: Escanear con SonarQube
-          command: |
-            sonar-scanner \
-              -Dsonar.projectKey=juarru_juanarillo_cicd_practica \
-              -Dsonar.organization=juan-arillo \
-              -Dsonar.host.url=${SONAR_HOST_URL} \
-              -Dsonar.login=${SONAR_TOKEN} \
-              -Dsonar.sources=. \
-              -Dsonar.python.coverage.reportPaths=coverage.xml
+          command: sonar-scanner
 
   generate-release-tag:
     executor: python-executor
