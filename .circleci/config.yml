@@ -179,42 +179,6 @@ jobs:
             docker tag ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} ${DOCKERHUB_USERNAME}/cicd_practica:latest
             docker push ${DOCKERHUB_USERNAME}/cicd_practica:latest
 
-  update-argo-manifests:
-    executor: python-executor
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Install Git
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y git
-
-      - run:
-          name: Clone Manifests Repository
-          command: |
-            git clone https://github.com/juarru/juanarillo_cicd_practica_argo.git
-            cd juanarillo_cicd_practica_argo
-            git config user.email "circleci@github.com"
-            git config user.name "CircleCI"
-
-      - run:
-          name: Get version from Git Tag
-          command: |
-            TAG=$(git describe --tags --match "v*" --abbrev=0)
-            echo "export IMAGE_VERSION=${TAG}" >> $BASH_ENV
-
-      - run:
-          name: Update Deployment YAML
-          command: |
-            cd juanarillo_cicd_practica_argo
-            sed -i "s|image: ${DOCKERHUB_USERNAME}/cicd_practica:.*|image: ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION}|" k8s/deployment.yml
-            git add k8s/deployment.yml
-            git commit -m "Update image to ${IMAGE_VERSION}"
-            git push https://x-access-token:${GITHUB_PAT}@github.com/juarru/juanarillo_cicd_practica_argo.git main
-    environment:
-      IMAGE_VERSION: ${IMAGE_VERSION}
-
 workflows:
   linting-test-coverage:
     jobs:
@@ -278,11 +242,4 @@ workflows:
             branches:
               only:
                 - main
-      - update-argo-manifests:
-          requires:
-            - build-and-push-main
-          filters:
-            branches:
-              only:
-                - main         
       
