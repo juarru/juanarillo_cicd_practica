@@ -112,7 +112,7 @@ jobs:
           at: .
       - run:
           name: Escanear con SonarQube
-          command: sonar-scanner
+          command: sonar-scanner -Dproject.settings=sonar-project.properties
 
   generate-release-tag:
     executor: python-executor
