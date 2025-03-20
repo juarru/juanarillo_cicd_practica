@@ -11,7 +11,7 @@ executors:
     working_directory: ~/repo
 
 orbs:
-  sonarcloud: sonarsource/sonarcloud@2.0.0
+  # sonarcloud: sonarsource/sonarcloud@2.0.0
   ggshield: gitguardian/ggshield@volatile
   codecov: codecov/codecov@5
 
@@ -83,7 +83,6 @@ jobs:
           name: Run coverage
           command: |
             . venv/bin/activate
-            mkdir -p coverage_reports
             pytest --cov=app --cov-report=xml app/test_app.py
 
       - codecov/upload
@@ -91,20 +90,37 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - coverage_reports
+            - coverage.xml
+            - venv
 
       - run:
           name: Finished dev pipeline
           command: |
             echo "Finished dev pipeline"
 
-  sonarqube_scan:
-    executor: python-executor
+  # sonarqube_scan:
+  #   executor: python-executor
+  #   steps:
+  #     - checkout
+  #     - attach_workspace:
+  #         at: .
+  #     - sonarcloud/scan
+  sonar_scan:
+    docker:
+      - image: sonarsource/sonar-scanner-cli:latest
     steps:
-      - checkout
       - attach_workspace:
-          at: .
-      - sonarcloud/scan
+          at: /workspace
+      - run:
+          name: Escanear con SonarQube
+          command: |
+            sonar-scanner \
+              -Dsonar.projectKey=tu_proyecto \
+              -Dsonar.organization=tu_organizacion \
+              -Dsonar.host.url=${SONAR_HOST_URL} \
+              -Dsonar.login=${SONAR_TOKEN} \
+              -Dsonar.sources=. \
+              -Dsonar.python.coverage.reportPaths=/workspace/coverage.xml
 
   generate-release-tag:
     executor: python-executor
@@ -221,7 +237,15 @@ workflows:
               only:
                 - main
                 - dev
-      - sonarqube_scan:
+      # - sonarqube_scan:
+      #     context: SonarCloud
+      #     requires:
+      #       - test_coverage
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
+      - sonar_scan:
           context: SonarCloud
           requires:
             - test_coverage
@@ -234,7 +258,7 @@ workflows:
             - GitHub
             - DockerHub
           requires:
-            - sonarqube_scan
+            - sonar_scan
           filters:  
             branches:
               only:
