@@ -117,7 +117,8 @@ jobs:
               -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
               -Dsonar.organization=${SONAR_ORGANIZATION} \
               -Dsonar.host.url=${SONAR_HOST_URL} \
-              -Dsonar.login=${SONAR_TOKEN}
+              -Dsonar.login=${SONAR_TOKEN} \
+              -Dproject.settings=sonar-project.properties
 
   generate-release-tag:
     executor: python-executor
