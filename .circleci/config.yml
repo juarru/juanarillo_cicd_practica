@@ -11,7 +11,7 @@ executors:
     working_directory: ~/repo
 
 orbs:
-  # sonarcloud: sonarsource/sonarcloud@2.0.0
+  #sonarcloud: sonarsource/sonarcloud@2.0.0
   ggshield: gitguardian/ggshield@volatile
   codecov: codecov/codecov@5
 
@@ -110,17 +110,17 @@ jobs:
       - image: sonarsource/sonar-scanner-cli:latest
     steps:
       - attach_workspace:
-          at: /workspace
+          at: .
       - run:
           name: Escanear con SonarQube
           command: |
             sonar-scanner \
-              -Dsonar.projectKey=tu_proyecto \
-              -Dsonar.organization=tu_organizacion \
+              -Dsonar.projectKey=juarru_juanarillo_cicd_practica \
+              -Dsonar.organization=juan-arillo \
               -Dsonar.host.url=${SONAR_HOST_URL} \
               -Dsonar.login=${SONAR_TOKEN} \
               -Dsonar.sources=. \
-              -Dsonar.python.coverage.reportPaths=/workspace/coverage.xml
+              -Dsonar.python.coverage.reportPaths=coverage.xml
 
   generate-release-tag:
     executor: python-executor
