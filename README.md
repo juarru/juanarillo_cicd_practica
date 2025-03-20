@@ -10,6 +10,7 @@ Configuraciones para Pipelines *CircleCI* y *Github Actions*.
 
 - [Descripción](#descripción)
 - [Estructura del Proyecto](#estructura-del-proyecto)
+- [Requisitos](#requisitos)
 - [Configuración y ejecución local](#configuración-y-ejecución-local)
 
 ## Descripción
@@ -48,6 +49,11 @@ A su vez genera las releases, los changelogs y los artefactos en cada mergeo a l
 ├── docker-compose.yml               -> Configuración de servicios con Docker Compose  
 ├── sonar-project.properties         -> Configuración para SonarQube  
 ├── README.md                        -> Documentación del proyecto  
+
+## Requisitos
+
+- [*Docker*](https://www.docker.com/)
+- [*Git*](https://git-scm.com/)
 
 ## Configuración y ejecución local
 
