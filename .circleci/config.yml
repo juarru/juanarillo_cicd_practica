@@ -13,6 +13,7 @@ executors:
 orbs:
   sonarcloud: sonarsource/sonarcloud@2.0.0
   ggshield: gitguardian/ggshield@volatile
+  codecov: codecov/codecov@5
 
 jobs:
   install_dependencies:
@@ -76,8 +77,10 @@ jobs:
           command: |
             . venv/bin/activate
             mkdir -p coverage_reports
-            pytest --cov=app --cov-report=xml:coverage_reports/coverage.xml app/test_app.py
-      
+            pytest --cov=app --cov-report=xml app/test_app.py
+
+      - codecov/upload
+
       - persist_to_workspace:
           root: .
           paths:
@@ -95,11 +98,6 @@ jobs:
       - attach_workspace:
           at: .
       - sonarcloud/scan
-            
-      - run:
-          name: Finished main pipeline
-          command: |
-            echo "Finished main pipeline"
 
   generate-release-tag:
     executor: python-executor
