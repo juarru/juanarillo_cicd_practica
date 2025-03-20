@@ -51,10 +51,17 @@ jobs:
             - v1-dependencies-
 
       - run:
+          name: Install Dependencies
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install --upgrade pip
+            pip install -r app/requirements.txt pylint
+
+      - run:
           name: Run Pylint
           command: |
-            . venv/bin/activate
-            pylint --rcfile=app/.pylintrc app/app.py
+            venv/bin/pylint --rcfile=app/.pylintrc app/app.py
 
   test_coverage:
     executor: python-executor
