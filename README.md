@@ -18,7 +18,7 @@ Este repositorio contiene una aplicación *Flask* que cuenta el número de veces
 
 Viene preparado para automatizar y preparar un contendor de desarrollo en Docker a través de *Visual Studio Code*.
 
-También crea *Actions* de Github y pipelines de *CircleCI* para la construcción de imágenes de la aplicación de manera automatizada, así como la subida de la misma al repositorio *Docker Hub*. 
+También crea *Actions* de Github y pipelines de *CircleCI* para la construcción de imágenes de la aplicación de manera automatizada, así como la subida de la misma al repositorio *Docker Hub*.  
 
 A su vez genera las releases, los changelogs y los artefactos en cada mergeo a la rama main del proyecto.
 
