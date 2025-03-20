@@ -91,6 +91,7 @@ jobs:
           root: .
           paths:
             - coverage.xml
+            - sonar-project.properties
 
       - run:
           name: Finished dev pipeline
