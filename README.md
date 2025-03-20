@@ -8,7 +8,7 @@ Configuraciones para Pipelines *CircleCI* y *Github Actions*.
 
 ## TABLA DE CONTENIDOS
 
-- [Descripción](#Descripcion)
+- [Descripción](#descripción)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Configuración y ejecución local](#configuración-y-ejecución-local)
 
