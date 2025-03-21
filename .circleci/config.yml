@@ -175,8 +175,13 @@ jobs:
             - v1-dependencies-
 
       - run:
+          name: Ensure full Git history
+          command: |
+            git fetch --unshallow || true
+
+      - run:
           name: Install Semantic Release
-          command: npm install -g semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github @semantic-release/commit-analyzer @semantic-release/release-notes-generator conventional-changelog-conventionalcommits
+          command: npm install -g semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github @semantic-release/commit-analyzer @semantic-release/release-notes-generator conventional-changelog-conventionalcommits@6
 
       - run:
           name: Run Semantic Release
