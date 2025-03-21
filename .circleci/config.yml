@@ -147,14 +147,16 @@ jobs:
             - v1-dependencies-{{ checksum "app/requirements.txt" }}
             - v1-dependencies-
       - run:
-          name: Tactical waiting
-          command: sleep 20
+          name: Fetch latest Git tags
+          command: |
+            git fetch --unshallow || true
+            git fetch --tags --force
       - run:
           name: Get version from Git Tag
           command: |
-            git fetch --tags --force
             TAG=$(git describe --tags --match "v*" --abbrev=0)
             echo "export IMAGE_VERSION=${TAG}" >> $BASH_ENV
+            echo "Detected version: ${TAG}"
       - run:
           name: Build Docker Image
           command: docker build -t ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} .
