@@ -1,3 +1,10 @@
+## [1.3.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v1.2.0...v1.3.0) (2025-03-21)
+
+
+### Features
+
+* removed random text on app. ([54cb4c4](https://github.com/juarru/juanarillo_cicd_practica/commit/54cb4c424d0397608a482bcb619c3ab640262527))
+
 ## [1.2.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v1.1.0...v1.2.0) (2025-03-21)
 
 
