@@ -1,3 +1,10 @@
+## [1.2.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v1.1.0...v1.2.0) (2025-03-21)
+
+
+### Features
+
+* fixing argocd executor ([5c9aea8](https://github.com/juarru/juanarillo_cicd_practica/commit/5c9aea8dc1e57f41a4b1957b2150a471b7693bd0))
+
 ## [1.1.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v1.0.0...v1.1.0) (2025-03-21)
 
 
