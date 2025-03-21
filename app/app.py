@@ -18,7 +18,7 @@ db = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, decode_responses
 @app.route('/')
 def index():
     count = db.incr('hits')  # Increment redis counter
-    return f"La página ha sido cargada {count} veces. Texto para probar actualización automática"
+    return f"La página ha sido cargada {count} veces."
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
