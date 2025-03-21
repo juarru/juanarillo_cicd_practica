@@ -1,3 +1,10 @@
+## [0.44.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v0.43.0...v0.44.0) (2025-03-21)
+
+
+### Features
+
+* primer cambio de version BREAKING CHANGE ([e05db5b](https://github.com/juarru/juanarillo_cicd_practica/commit/e05db5b32a5c096712ae7930de8ac04b44ddc109))
+
 ## [0.43.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v0.42.0...v0.43.0) (2025-03-21)
 
 
