@@ -10,7 +10,6 @@ executors:
       - image: cimg/node:18.20
 
 orbs:
-  #sonarcloud: sonarsource/sonarcloud@2.0.0
   ggshield: gitguardian/ggshield@volatile
   codecov: codecov/codecov@5
 
