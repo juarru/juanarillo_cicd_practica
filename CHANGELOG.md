@@ -1,3 +1,14 @@
+## [1.0.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v0.44.0...v1.0.0) (2025-03-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* removing unnecesary code.
+
+### Continuous Integration
+
+* removing unnecesary code. ([9099eaf](https://github.com/juarru/juanarillo_cicd_practica/commit/9099eaf50e8d7974500c62ec815d44d2bb112d84))
+
 ## [0.44.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v0.43.0...v0.44.0) (2025-03-21)
 
 
