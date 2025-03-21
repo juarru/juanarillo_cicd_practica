@@ -2,10 +2,12 @@
     "branches": ["main"],
     "plugins": [
       ["@semantic-release/commit-analyzer", {
-        "preset": "conventionalcommits"
+        "preset": "conventionalcommits",
+        "config": "conventional-changelog-conventionalcommits"
       }],
       ["@semantic-release/release-notes-generator" , {
-        "preset": "conventionalcommits"
+        "preset": "conventionalcommits",
+        "config": "conventional-changelog-conventionalcommits"
       }],
       ["@semantic-release/changelog" , {
         "changelogFile": "CHANGELOG.md"
