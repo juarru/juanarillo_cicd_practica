@@ -98,13 +98,6 @@ jobs:
           command: |
             echo "Finished dev pipeline"
 
-  # sonarqube_scan:
-  #   executor: python-executor
-  #   steps:
-  #     - checkout
-  #     - attach_workspace:
-  #         at: .
-  #     - sonarcloud/scan
   sonar_scan:
     docker:
       - image: sonarsource/sonar-scanner-cli:latest
@@ -236,14 +229,7 @@ workflows:
               only:
                 - main
                 - dev
-      # - sonarqube_scan:
-      #     context: SonarCloud
-      #     requires:
-      #       - test_coverage
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
+
       - sonar_scan:
           context: SonarCloud
           requires:
