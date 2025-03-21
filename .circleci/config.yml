@@ -8,6 +8,10 @@ executors:
   node-executor:
     docker:
       - image: cimg/node:18.20
+  argocd-executor:
+    docker:
+      - image: quay.io/argoproj/argocd:latest
+    working_directory: ~/repo
 
 orbs:
   ggshield: gitguardian/ggshield@volatile
@@ -165,6 +169,28 @@ jobs:
             docker tag ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} ${DOCKERHUB_USERNAME}/cicd_practica:latest
             docker push ${DOCKERHUB_USERNAME}/cicd_practica:latest
 
+  argocd-deploy:
+    executor: argocd-executor
+    steps:
+      - run:
+          name: Get ArgoCD Admin Password
+          command: |
+            export ARGOCD_PASSWORD=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 --decode)
+            export ARGOCD_SERVER=http://localhost:8081
+            echo "ArgoCD password retrieved successfully."
+      - run:
+          name: Login to ArgoCD
+          command: |
+            argocd login ${ARGOCD_SERVER} \
+              --username admin \
+              --password ${ARGOCD_PASSWORD} \
+              --insecure
+      - run:
+          name: Trigger ArgoCD Sync
+          command: |
+            argocd app sync flask-app
+            argocd app wait flask-app --health
+
 workflows:
   linting-test-coverage:
     jobs:
@@ -225,6 +251,13 @@ workflows:
           context: DockerHub
           requires:
             - generate-release
+          filters:
+            branches:
+              only:
+                - main
+      - argocd-deploy:
+          requires:
+            - build-and-push-main
           filters:
             branches:
               only:
