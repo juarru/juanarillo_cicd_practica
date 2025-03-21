@@ -176,6 +176,7 @@ jobs:
           name: Get ArgoCD Admin Password
           command: |
             export ARGOCD_PASSWORD=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 --decode)
+            export ARGOCD_SERVER=http://localhost:8081
             echo "ArgoCD password retrieved successfully."
       - run:
           name: Login to ArgoCD
