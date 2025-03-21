@@ -149,6 +149,7 @@ jobs:
       - run:
           name: Get version from Git Tag
           command: |
+            git fetch --tags --force
             TAG=$(git describe --tags --match "v*" --abbrev=0)
             echo "export IMAGE_VERSION=${TAG}" >> $BASH_ENV
       - run:
