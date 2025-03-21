@@ -173,6 +173,10 @@ jobs:
     executor: argocd-executor
     steps:
       - run:
+          name: Install kubectl
+          command: |
+            apt-get update && apt-get install -y kubectl
+      - run:
           name: Get ArgoCD Admin Password
           command: |
             export ARGOCD_PASSWORD=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 --decode)
