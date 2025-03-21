@@ -5,9 +5,9 @@ executors:
     docker:
       - image: cimg/python:3.9
     working_directory: ~/repo
-  python-node-executor:
+  node-executor:
     docker:
-      - image: cimg/python:3.9-node
+      - image: cimg/node:18.20
 
 orbs:
   #sonarcloud: sonarsource/sonarcloud@2.0.0
@@ -165,7 +165,7 @@ jobs:
   #                 }"
 
   generate-release:
-    executor: python-node-executor
+    executor: node-executor
     steps:
       - checkout
 
