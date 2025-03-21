@@ -151,6 +151,9 @@ jobs:
             - v1-dependencies-{{ checksum "app/requirements.txt" }}
             - v1-dependencies-
       - run:
+          name: Tactical waiting
+          command: sleep 20
+      - run:
           name: Get version from Git Tag
           command: |
             git fetch --tags --force
