@@ -137,6 +137,11 @@ jobs:
             export GITHUB_TOKEN=${GITHUB_TOKEN}
             npx semantic-release
 
+      - run:
+          name: Push new tags to GitHub
+          command: |
+            git push origin --tags
+
   build-and-push-main:
     executor: python-executor
     steps:
