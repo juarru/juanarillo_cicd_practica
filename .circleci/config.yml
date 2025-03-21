@@ -10,7 +10,7 @@ executors:
       - image: cimg/node:18.20
   argocd-executor:
     docker:
-      - image: quay.io/argoproj/argocd:latest
+      - image: bitnami/kubectl:latest
     working_directory: ~/repo
 
 orbs:
@@ -150,6 +150,9 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "app/requirements.txt" }}
             - v1-dependencies-
+      - run:
+          name: Tactical waiting
+          command: sleep 20
       - run:
           name: Get version from Git Tag
           command: |
