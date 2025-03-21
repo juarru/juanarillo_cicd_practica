@@ -60,8 +60,8 @@ A su vez genera las releases, los changelogs y los artefactos en cada mergeo a l
 - Clonar el Repositorio
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
-cd <NOMBRE_DEL_PROYECTO>
+git clone https://github.com/juarru/juanarillo_cicd_practica.git
+cd juanarillo_cicd_practica
 ```
 
 - Levantar los servicios
