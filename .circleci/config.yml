@@ -8,9 +8,9 @@ executors:
   node-executor:
     docker:
       - image: cimg/node:18.20
-  curl-executor:
+  argocd-executor:
     docker:
-      - image: curlimages/curl:latest
+      - image: quay.io/argoproj/argocd:latest
     working_directory: ~/repo
 
 orbs:
@@ -170,15 +170,25 @@ jobs:
             docker push ${DOCKERHUB_USERNAME}/cicd_practica:latest
 
   argocd-deploy:
-    executor: curl-executor
+    executor: argocd-executor
     steps:
+      - run:
+          name: Get ArgoCD Admin Password
+          command: |
+            export ARGOCD_PASSWORD=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 --decode)
+            echo "ArgoCD password retrieved successfully."
+      - run:
+          name: Login to ArgoCD
+          command: |
+            argocd login ${ARGOCD_SERVER} \
+              --username admin \
+              --password ${ARGOCD_PASSWORD} \
+              --insecure
       - run:
           name: Trigger ArgoCD Sync
           command: |
-            curl -X POST "http://${ARGOCD_SERVER}/api/v1/applications/flask-app/sync" \
-              -H "Authorization: Bearer ${ARGOCD_AUTH_TOKEN}" \
-              -H "Content-Type: application/json" \
-              -d '{}'
+            argocd app sync flask-app
+            argocd app wait flask-app --health
 
 workflows:
   linting-test-coverage:
