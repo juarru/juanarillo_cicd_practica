@@ -175,6 +175,13 @@ jobs:
   argocd-deploy:
     executor: argocd-executor
     steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "app/requirements.txt" }}
+            - v1-dependencies-
+            
       - run:
           name: Install kubectl
           command: |
