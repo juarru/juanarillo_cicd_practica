@@ -10,7 +10,7 @@ executors:
       - image: cimg/node:18.20
   argocd-executor:
     docker:
-      - image: ghcr.io/canonical/kubectl:latest
+      - image: bitnami/kubectl:latest
     working_directory: ~/repo
 
 orbs:
@@ -175,6 +175,11 @@ jobs:
   argocd-deploy:
     executor: argocd-executor
     steps:
+      - run:
+          name: Install Git
+          command: |
+            apt-get update && apt-get install -y git
+            
       - checkout
 
       - restore_cache:
