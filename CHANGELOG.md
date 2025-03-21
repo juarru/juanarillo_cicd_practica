@@ -1,3 +1,12 @@
+## [1.1.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v1.0.0...v1.1.0) (2025-03-21)
+
+
+### Features
+
+* added argo trigger. ([ce7b121](https://github.com/juarru/juanarillo_cicd_practica/commit/ce7b121ef1f0ecd3cea41ea6375b5342f32293b7))
+* added new argo configuration. ([ed18b90](https://github.com/juarru/juanarillo_cicd_practica/commit/ed18b90bab2433ae3f64cd49587115346e0efb46))
+* added new argo configuration. ([2e2c7f1](https://github.com/juarru/juanarillo_cicd_practica/commit/2e2c7f154cbc0e5c2f43f3be5924281296229d1a))
+
 ## [1.0.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v0.44.0...v1.0.0) (2025-03-21)
 
 
