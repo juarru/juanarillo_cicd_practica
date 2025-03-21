@@ -140,6 +140,7 @@ jobs:
       - run:
           name: Push new tags to GitHub
           command: |
+            git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/juarru/juanarillo_cicd_practica.git
             git push origin --tags
 
   build-and-push-main:
