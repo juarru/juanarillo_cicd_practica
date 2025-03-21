@@ -1,3 +1,10 @@
+## [1.7.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v1.6.0...v1.7.0) (2025-03-21)
+
+
+### Features
+
+* fixing build and push ([d7c338d](https://github.com/juarru/juanarillo_cicd_practica/commit/d7c338dbaea41a095a3e5137611caff9046d2387))
+
 ## [1.6.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v1.5.0...v1.6.0) (2025-03-21)
 
 
