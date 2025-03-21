@@ -175,7 +175,7 @@ jobs:
       - run:
           name: Install kubectl
           command: |
-            apt-get update && apt-get install -y kubectl
+            sudo apt-get update && sudo apt-get install -y kubectl
       - run:
           name: Get ArgoCD Admin Password
           command: |
