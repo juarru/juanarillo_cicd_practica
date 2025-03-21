@@ -1,3 +1,10 @@
+## [1.11.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v1.10.0...v1.11.0) (2025-03-21)
+
+
+### Features
+
+* updated readme. ([3142cd1](https://github.com/juarru/juanarillo_cicd_practica/commit/3142cd1db3a0ee182de1b86594db31408fbd6631))
+
 ## [1.10.0](https://github.com/juarru/juanarillo_cicd_practica/compare/v1.9.0...v1.10.0) (2025-03-21)
 
 
