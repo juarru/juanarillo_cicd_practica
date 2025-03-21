@@ -5,10 +5,9 @@ executors:
     docker:
       - image: cimg/python:3.9
     working_directory: ~/repo
-  curl-executor:
+  python-node-executor:
     docker:
-      - image: curlimages/curl:latest
-    working_directory: ~/repo
+      - image: cimg/python:3.9-node
 
 orbs:
   #sonarcloud: sonarsource/sonarcloud@2.0.0
@@ -166,7 +165,7 @@ jobs:
   #                 }"
 
   generate-release:
-    executor: python-executor
+    executor: python-node-executor
     steps:
       - checkout
 
@@ -176,11 +175,8 @@ jobs:
             - v1-dependencies-
 
       - run:
-          name: Install Node.js and Semantic Release
-          command: |
-            curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-            apt-get install -y nodejs
-            npm install -g semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github @semantic-release/commit-analyzer @semantic-release/release-notes-generator
+          name: Install Semantic Release
+          command: npm install -g semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github @semantic-release/commit-analyzer @semantic-release/release-notes-generator
 
       - run:
           name: Run Semantic Release
