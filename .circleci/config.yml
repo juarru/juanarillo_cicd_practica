@@ -8,6 +8,10 @@ executors:
   node-executor:
     docker:
       - image: cimg/node:18.20
+  curl-executor:
+    docker:
+      - image: curlimages/curl:latest
+    working_directory: ~/repo
 
 orbs:
   ggshield: gitguardian/ggshield@volatile
@@ -165,6 +169,17 @@ jobs:
             docker tag ${DOCKERHUB_USERNAME}/cicd_practica:${IMAGE_VERSION} ${DOCKERHUB_USERNAME}/cicd_practica:latest
             docker push ${DOCKERHUB_USERNAME}/cicd_practica:latest
 
+  argocd-deploy:
+    executor: curl-executor
+    steps:
+      - run:
+          name: Trigger ArgoCD Sync
+          command: |
+            curl -X POST "http://${ARGOCD_SERVER}/api/v1/applications/flask-app/sync" \
+              -H "Authorization: Bearer ${ARGOCD_AUTH_TOKEN}" \
+              -H "Content-Type: application/json" \
+              -d '{}'
+
 workflows:
   linting-test-coverage:
     jobs:
@@ -225,6 +240,13 @@ workflows:
           context: DockerHub
           requires:
             - generate-release
+          filters:
+            branches:
+              only:
+                - main
+      - argocd-deploy:
+          requires:
+            - build-and-push-main
           filters:
             branches:
               only:
