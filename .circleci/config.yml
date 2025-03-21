@@ -10,7 +10,7 @@ executors:
       - image: cimg/node:18.20
   argocd-executor:
     docker:
-      - image: bitnami/kubectl:latest
+      - image: ghcr.io/canonical/kubectl:latest
     working_directory: ~/repo
 
 orbs:
